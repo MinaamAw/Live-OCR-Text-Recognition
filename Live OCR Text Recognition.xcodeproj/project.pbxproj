@@ -13,6 +13,7 @@
 		297E993D268C64C0006C8786 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 297E993B268C64C0006C8786 /* Main.storyboard */; };
 		297E993F268C64C3006C8786 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297E993E268C64C3006C8786 /* Assets.xcassets */; };
 		297E9942268C64C3006C8786 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 297E9940268C64C3006C8786 /* LaunchScreen.storyboard */; };
+		297E994C268C7185006C8786 /* RecognizedTextDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297E994B268C7185006C8786 /* RecognizedTextDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		297E993E268C64C3006C8786 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		297E9941268C64C3006C8786 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		297E9943268C64C3006C8786 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		297E994B268C7185006C8786 /* RecognizedTextDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecognizedTextDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				297E9935268C64C0006C8786 /* AppDelegate.swift */,
 				297E9937268C64C0006C8786 /* SceneDelegate.swift */,
 				297E9939268C64C0006C8786 /* ViewController.swift */,
+				297E994B268C7185006C8786 /* RecognizedTextDataSource.swift */,
 				297E993B268C64C0006C8786 /* Main.storyboard */,
 				297E993E268C64C3006C8786 /* Assets.xcassets */,
 				297E9940268C64C3006C8786 /* LaunchScreen.storyboard */,
@@ -140,6 +143,7 @@
 				297E993A268C64C0006C8786 /* ViewController.swift in Sources */,
 				297E9936268C64C0006C8786 /* AppDelegate.swift in Sources */,
 				297E9938268C64C0006C8786 /* SceneDelegate.swift in Sources */,
+				297E994C268C7185006C8786 /* RecognizedTextDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
