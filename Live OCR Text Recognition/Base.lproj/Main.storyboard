@@ -56,22 +56,50 @@
         <scene sceneID="ztB-ca-c4Q">
             <objects>
                 <viewController storyboardIdentifier="secondVC" title="cameraView" id="Fzd-Dj-iSl" customClass="SecondViewController" customModule="Live_OCR_Text_Recognition" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="LBW-0i-AyP">
+                    <view key="view" contentMode="scaleToFill" id="ycn-FJ-NGp">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="pgH-b4-VpF"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view multipleTouchEnabled="YES" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="3XY-O5-z9B">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qpi-6z-85A">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="mIA-9y-bnQ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="3XY-O5-z9B" firstAttribute="centerX" secondItem="ycn-FJ-NGp" secondAttribute="centerX" id="0WI-Pd-yOc"/>
+                            <constraint firstItem="Qpi-6z-85A" firstAttribute="top" secondItem="ycn-FJ-NGp" secondAttribute="top" id="5QO-aJ-C0r"/>
+                            <constraint firstItem="3XY-O5-z9B" firstAttribute="centerY" secondItem="ycn-FJ-NGp" secondAttribute="centerY" id="Nor-d9-LyO"/>
+                            <constraint firstItem="Qpi-6z-85A" firstAttribute="leading" secondItem="ycn-FJ-NGp" secondAttribute="leading" id="RzU-fP-g0B"/>
+                            <constraint firstAttribute="centerY" secondItem="Qpi-6z-85A" secondAttribute="centerY" id="V6S-Xe-uJK"/>
+                            <constraint firstAttribute="bottom" secondItem="Qpi-6z-85A" secondAttribute="bottom" id="aub-RL-bpY"/>
+                            <constraint firstItem="3XY-O5-z9B" firstAttribute="leading" secondItem="ycn-FJ-NGp" secondAttribute="leading" id="cW8-WG-N0l"/>
+                            <constraint firstItem="Qpi-6z-85A" firstAttribute="trailing" secondItem="ycn-FJ-NGp" secondAttribute="trailing" id="iZJ-eq-Wcg"/>
+                            <constraint firstItem="3XY-O5-z9B" firstAttribute="trailing" secondItem="ycn-FJ-NGp" secondAttribute="trailing" id="kPg-8F-izV"/>
+                            <constraint firstItem="Qpi-6z-85A" firstAttribute="centerX" secondItem="ycn-FJ-NGp" secondAttribute="centerX" id="kw7-pJ-Y1M"/>
+                            <constraint firstAttribute="bottom" secondItem="3XY-O5-z9B" secondAttribute="bottom" id="yYL-Eh-YxB"/>
+                            <constraint firstItem="3XY-O5-z9B" firstAttribute="top" secondItem="ycn-FJ-NGp" secondAttribute="top" id="z4i-ha-7We"/>
+                        </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Live OCR" largeTitleDisplayMode="never" id="gDp-VJ-ya3">
+                    <navigationItem key="navigationItem" title="Scan Card" largeTitleDisplayMode="never" id="gDp-VJ-ya3">
                         <barButtonItem key="backBarButtonItem" title="Yes" id="1LT-vF-Mg1"/>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="focusView" destination="Qpi-6z-85A" id="1qi-5b-e90"/>
+                        <outlet property="previewCamera" destination="3XY-O5-z9B" id="X2B-6n-WBu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6lp-1Z-CNw" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2123" y="-573"/>
+            <point key="canvasLocation" x="2121.739130434783" y="-573.21428571428567"/>
         </scene>
     </scenes>
     <resources>
