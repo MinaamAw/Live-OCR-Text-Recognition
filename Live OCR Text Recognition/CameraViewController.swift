@@ -12,6 +12,7 @@
 import AVFoundation
 import UIKit
 import Vision
+import Reg
 
 
 class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -43,7 +44,17 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     
     
     // Initialize:
+    
+    enum Candidate: Hashable {
+        case number(String), name(String)
+        case issueDate(DateComponents)
+        case expireDate(DateComponents)
+       }
+    
+    typealias PredictedCount = Int
     private var textRequest = VNRecognizeTextRequest()
+    private var selectedCard = CreditCard()
+    private var predictedCardInfo: [Candidate: PredictedCount] = [:]
     
     
     override func viewDidLoad() {
@@ -140,22 +151,101 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         self.detectRectangle(in: pixelBuffer)
         
         
+        // Regex:
+        let creditCardNumber: Regex = #"(?:\d[ -]*?){13,16}"#
+        let month: Regex = #"(\d{2})\/\d{2}"#
+        let year: Regex = #"\d{2}\/(\d{2})"#
+        let wordsToSkip = ["mastercard", "jcb", "visa", "express", "bank", "card", "platinum", "reward"]
+        
+        
+        // These may be contained in the date strings, so ignore them only for names
+        //let invalidNames = ["expiration", "valid", "since", "from", "until", "month", "year"]
+        //let name: Regex = #"([A-z]{2,}\h([A-z.]+\h)?[A-z]{2,})"#
+
+        
         // OCR Text Request:
+        let maxCandidates = 1
         textRequest = VNRecognizeTextRequest { textRequest, error in
-                   guard let observations = textRequest.results as? [VNRecognizedTextObservation],
-                         error == nil else {
-                       return
-                   }
-                   let text = observations.compactMap({
-                       $0.topCandidates(1).first?.string
-                   }).joined(separator: "\n")
-                   
-                   DispatchQueue.main.async {
+            guard let observations = textRequest.results as? [VNRecognizedTextObservation],
+                  error == nil else {
+                return
+                
+            }
+            
+            var creditCard = CreditCard(cardNumber: nil, holderName: nil, issueDate: nil, expireDate: nil)
+            
+            for result in observations {
+                guard let candidate = result.topCandidates(maxCandidates).first,
+                      candidate.confidence > 0.1
+                else { continue }
+                
+                let string = candidate.string
+                let containsWordToSkip = wordsToSkip.contains { string.lowercased().contains($0) }
+                if containsWordToSkip { continue }
+                
+                if let cardNumber = creditCardNumber.firstMatch(in: string)?
+                    .replacingOccurrences(of: " ", with: " ")
+                    .replacingOccurrences(of: "-", with: " ") {
+                    creditCard.cardNumber = cardNumber
                     
-                    // Print Text Read:
-                    print(text)
-                   }
-               }
+                    print(cardNumber)
+                } else if let issueMonth = month.captures(in: string).last.flatMap(Int.init),
+                          let issueYear = year.captures(in: string).last.flatMap({ Int("20" + $0) }) {
+                    creditCard.issueDate = DateComponents(year: issueYear, month: issueMonth)
+                    
+                    print(issueMonth)
+                    print(issueYear)
+                    
+//                } else if let expireMonth = month.captures(in: string).last.flatMap(Int.init),
+//                          let expireYear = year.captures(in: string).last.flatMap({ Int("20" + $0) }) {
+//                    creditCard.expireDate = DateComponents(year: expireYear, month: expireMonth)
+                
+                } else {
+                    continue
+                }
+            }
+            
+            
+            // Number
+            if let number = creditCard.cardNumber {
+                let count = self.predictedCardInfo[.number(number), default: 0]
+                self.predictedCardInfo[.number(number)] = count + 1
+                
+                if count > 3 {
+                    self.selectedCard.cardNumber = number
+                    //print(self.selectedCard)
+                }
+            }
+            if let issueDate = creditCard.issueDate {
+                let count = self.predictedCardInfo[.issueDate(issueDate), default: 0]
+                self.predictedCardInfo[.issueDate(issueDate)] = count + 1
+                
+                if count > 3 {
+                    self.selectedCard.issueDate = issueDate
+                    print(self.selectedCard)
+                }
+            }
+//            if let expireDate = creditCard.expireDate {
+//                let count = self.predictedCardInfo[.expireDate(expireDate), default: 0]
+//                self.predictedCardInfo[.expireDate(expireDate)] = count + 1
+//
+//                if count > 3 {
+//                    self.selectedCard.expireDate = expireDate
+//                    print(self.selectedCard)
+//                }
+//            }
+            
+            
+//                   let text = observations.compactMap({
+//                       $0.topCandidates(1).first?.string
+//                   }).joined(separator: "\n")
+//
+//                   DispatchQueue.main.async {
+//
+//                    // Print Text Read:
+//                    print(text)
+//                   }
+        }
         
         
         // OCR Properties & Request:

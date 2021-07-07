@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		290BB5922694642C0069C441 /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 290BB5912694642C0069C441 /* CreditCard.swift */; };
+		290BB59626946A9D0069C441 /* Reg in Frameworks */ = {isa = PBXBuildFile; productRef = 290BB59526946A9D0069C441 /* Reg */; };
 		297E9936268C64C0006C8786 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297E9935268C64C0006C8786 /* AppDelegate.swift */; };
 		297E9938268C64C0006C8786 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297E9937268C64C0006C8786 /* SceneDelegate.swift */; };
 		297E993A268C64C0006C8786 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297E9939268C64C0006C8786 /* ViewController.swift */; };
@@ -17,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		290BB5912694642C0069C441 /* CreditCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCard.swift; sourceTree = "<group>"; };
 		297E9932268C64C0006C8786 /* Live OCR Text Recognition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Live OCR Text Recognition.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		297E9935268C64C0006C8786 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		297E9937268C64C0006C8786 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -33,6 +36,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				290BB59626946A9D0069C441 /* Reg in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +70,7 @@
 				297E9940268C64C3006C8786 /* LaunchScreen.storyboard */,
 				297E9943268C64C3006C8786 /* Info.plist */,
 				297E994E268D29DE006C8786 /* CameraViewController.swift */,
+				290BB5912694642C0069C441 /* CreditCard.swift */,
 			);
 			path = "Live OCR Text Recognition";
 			sourceTree = "<group>";
@@ -86,6 +91,9 @@
 			dependencies = (
 			);
 			name = "Live OCR Text Recognition";
+			packageProductDependencies = (
+				290BB59526946A9D0069C441 /* Reg */,
+			);
 			productName = "Live OCR Text Recognition";
 			productReference = 297E9932268C64C0006C8786 /* Live OCR Text Recognition.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +121,9 @@
 				Base,
 			);
 			mainGroup = 297E9929268C64C0006C8786;
+			packageReferences = (
+				290BB59426946A9D0069C441 /* XCRemoteSwiftPackageReference "Reg" */,
+			);
 			productRefGroup = 297E9933268C64C0006C8786 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -141,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				297E993A268C64C0006C8786 /* ViewController.swift in Sources */,
+				290BB5922694642C0069C441 /* CreditCard.swift in Sources */,
 				297E994F268D29DE006C8786 /* CameraViewController.swift in Sources */,
 				297E9936268C64C0006C8786 /* AppDelegate.swift in Sources */,
 				297E9938268C64C0006C8786 /* SceneDelegate.swift in Sources */,
@@ -345,6 +357,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		290BB59426946A9D0069C441 /* XCRemoteSwiftPackageReference "Reg" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/yhkaplan/Reg.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		290BB59526946A9D0069C441 /* Reg */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 290BB59426946A9D0069C441 /* XCRemoteSwiftPackageReference "Reg" */;
+			productName = Reg;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 297E992A268C64C0006C8786 /* Project object */;
 }
