@@ -55,6 +55,7 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     private var textRequest = VNRecognizeTextRequest()
     private var selectedCard = CreditCard()
     private var predictedCardInfo: [Candidate: PredictedCount] = [:]
+    private var dateCount = 0
     
     
     override func viewDidLoad() {
@@ -155,12 +156,9 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         let creditCardNumber: Regex = #"(?:\d[ -]*?){13,16}"#
         let month: Regex = #"(\d{2})\/\d{2}"#
         let year: Regex = #"\d{2}\/(\d{2})"#
-        let wordsToSkip = ["mastercard", "jcb", "visa", "express", "bank", "card", "platinum", "reward"]
-        
-        
-        // These may be contained in the date strings, so ignore them only for names
-        //let invalidNames = ["expiration", "valid", "since", "from", "until", "month", "year"]
-        //let name: Regex = #"([A-z]{2,}\h([A-z.]+\h)?[A-z]{2,})"#
+        let wordsToSkip = ["mastercard", "jcb", "visa", "express", "bank", "card", "platinum", "reward", "credt", "card"]
+        let invalidNames = ["expiration", "valid", "since", "from", "until", "month", "year", "thru"]
+        let name: Regex = #"([A-z]{2,}\h([A-z.]+\h)?[A-z]{2,})"#
 
         
         // OCR Text Request:
@@ -176,37 +174,89 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             
             for result in observations {
                 guard let candidate = result.topCandidates(maxCandidates).first,
-                      candidate.confidence > 0.1
+                      candidate.confidence > 0.4
                 else { continue }
                 
                 let string = candidate.string
                 let containsWordToSkip = wordsToSkip.contains { string.lowercased().contains($0) }
                 if containsWordToSkip { continue }
                 
+                
+                // Recognize Key Values
                 if let cardNumber = creditCardNumber.firstMatch(in: string)?
                     .replacingOccurrences(of: " ", with: " ")
                     .replacingOccurrences(of: "-", with: " ") {
                     creditCard.cardNumber = cardNumber
                     
                     print(cardNumber)
-                } else if let issueMonth = month.captures(in: string).last.flatMap(Int.init),
-                          let issueYear = year.captures(in: string).last.flatMap({ Int("20" + $0) }) {
-                    creditCard.issueDate = DateComponents(year: issueYear, month: issueMonth)
                     
-                    print(issueMonth)
-                    print(issueYear)
+                } else if let month = month.captures(in: string).last.flatMap(Int.init),
+                          let year = year.captures(in: string).last.flatMap({ Int("20" + $0) }) {
+                    
+                    
+                    if self.dateCount == 0 {
+                        creditCard.issueDate = DateComponents(year: year, month: month)
+                        self.dateCount = self.dateCount + 1
+                        print("Date Count Year \(year)")
+                    }
+                    else {
+                        if let compare = creditCard.issueDate?.year {
+                            print(compare)
+                            if compare == year {
+                                creditCard.issueDate = DateComponents(year: year, month: month)
+                                print("issue \(year)")
+                            }
+                            else {
+                                creditCard.expireDate = DateComponents(year: year, month: month)
+                                print("expire \(year)")
+                            }
+                        }
+                    }
+
+                    
+//                    if checkIssueYear == 0 {
+//                        print(checkIssueYear)
+//                    }
+//                    else {
+//                        print(checkIssueYear)
+//                        print("else")
+//                    }
+                    
+
+//
+                    
+//                    print("andar")
+//                    if compare < year {
+//                        print("Expire")
+//                        creditCard.expireDate = DateComponents(year: year, month: month)
+//                    }
+//                    else {
+//                        print("else")
+//                        return
+//                    }
                     
 //                } else if let expireMonth = month.captures(in: string).last.flatMap(Int.init),
 //                          let expireYear = year.captures(in: string).last.flatMap({ Int("20" + $0) }) {
 //                    creditCard.expireDate = DateComponents(year: expireYear, month: expireMonth)
-                
+//
+//                    //print("here")
+//                    print(expireYear)
+//                    print(expireMonth)
+
+                } else if let name = name.firstMatch(in: string) {
+                    let containsInvalidName = invalidNames.contains { name.lowercased().contains($0) }
+                    if containsInvalidName { continue }
+                    creditCard.holderName = name
+                    
+                    print(name)
+                    
                 } else {
                     continue
                 }
             }
             
             
-            // Number
+            // Matching:
             if let number = creditCard.cardNumber {
                 let count = self.predictedCardInfo[.number(number), default: 0]
                 self.predictedCardInfo[.number(number)] = count + 1
@@ -216,6 +266,7 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                     //print(self.selectedCard)
                 }
             }
+            
             if let issueDate = creditCard.issueDate {
                 let count = self.predictedCardInfo[.issueDate(issueDate), default: 0]
                 self.predictedCardInfo[.issueDate(issueDate)] = count + 1
@@ -225,26 +276,26 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                     print(self.selectedCard)
                 }
             }
-//            if let expireDate = creditCard.expireDate {
-//                let count = self.predictedCardInfo[.expireDate(expireDate), default: 0]
-//                self.predictedCardInfo[.expireDate(expireDate)] = count + 1
-//
-//                if count > 3 {
-//                    self.selectedCard.expireDate = expireDate
-//                    print(self.selectedCard)
-//                }
-//            }
             
+            if let expireDate = creditCard.expireDate {
+                let count = self.predictedCardInfo[.expireDate(expireDate), default: 0]
+                self.predictedCardInfo[.expireDate(expireDate)] = count + 1
+
+                if count > 3 {
+                    self.selectedCard.expireDate = expireDate
+                    //print(self.selectedCard)
+                }
+            }
             
-//                   let text = observations.compactMap({
-//                       $0.topCandidates(1).first?.string
-//                   }).joined(separator: "\n")
-//
-//                   DispatchQueue.main.async {
-//
-//                    // Print Text Read:
-//                    print(text)
-//                   }
+            if let name = creditCard.holderName {
+                let count = self.predictedCardInfo[.name(name), default: 0]
+                self.predictedCardInfo[.name(name)] = count + 1
+                
+                if count > 3 {
+                    self.selectedCard.holderName = name
+                    //print(self.selectedCard)
+                }
+            }
         }
         
         
