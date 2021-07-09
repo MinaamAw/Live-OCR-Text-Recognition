@@ -56,6 +56,8 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     private var selectedCard = CreditCard()
     private var predictedCardInfo: [Candidate: PredictedCount] = [:]
     private var dateCount = 0
+    private var intYear = 0
+    private var intExpYear = 0
     
     
     override func viewDidLoad() {
@@ -174,7 +176,7 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             
             for result in observations {
                 guard let candidate = result.topCandidates(maxCandidates).first,
-                      candidate.confidence > 0.4
+                      candidate.confidence > 0.45
                 else { continue }
                 
                 let string = candidate.string
@@ -197,52 +199,24 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                     if self.dateCount == 0 {
                         creditCard.issueDate = DateComponents(year: year, month: month)
                         self.dateCount = self.dateCount + 1
-                        print("Date Count Year \(year)")
+                        self.intYear = year
+                        print("Date Count Year \(self.intYear)")
                     }
                     else {
-                        if let compare = creditCard.issueDate?.year {
-                            print(compare)
-                            if compare == year {
-                                creditCard.issueDate = DateComponents(year: year, month: month)
-                                print("issue \(year)")
-                            }
-                            else {
+                        if self.intYear == year {
+                            if self.intExpYear == 0 {
                                 creditCard.expireDate = DateComponents(year: year, month: month)
-                                print("expire \(year)")
+                                print("Expire Date: \(year)")
+                            } else {
+                                creditCard.issueDate = DateComponents(year: year, month: month)
+                                print("Issue Date: \(year)")
                             }
+                        } else {
+                            self.intExpYear = self.intExpYear + 1
+                            creditCard.expireDate = DateComponents(year: year, month: month)
+                            print("Expire Date: \(year)")
                         }
                     }
-
-                    
-//                    if checkIssueYear == 0 {
-//                        print(checkIssueYear)
-//                    }
-//                    else {
-//                        print(checkIssueYear)
-//                        print("else")
-//                    }
-                    
-
-//
-                    
-//                    print("andar")
-//                    if compare < year {
-//                        print("Expire")
-//                        creditCard.expireDate = DateComponents(year: year, month: month)
-//                    }
-//                    else {
-//                        print("else")
-//                        return
-//                    }
-                    
-//                } else if let expireMonth = month.captures(in: string).last.flatMap(Int.init),
-//                          let expireYear = year.captures(in: string).last.flatMap({ Int("20" + $0) }) {
-//                    creditCard.expireDate = DateComponents(year: expireYear, month: expireMonth)
-//
-//                    //print("here")
-//                    print(expireYear)
-//                    print(expireMonth)
-
                 } else if let name = name.firstMatch(in: string) {
                     let containsInvalidName = invalidNames.contains { name.lowercased().contains($0) }
                     if containsInvalidName { continue }
@@ -261,9 +235,8 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                 let count = self.predictedCardInfo[.number(number), default: 0]
                 self.predictedCardInfo[.number(number)] = count + 1
                 
-                if count > 3 {
+                if count > 5 {
                     self.selectedCard.cardNumber = number
-                    //print(self.selectedCard)
                 }
             }
             
@@ -271,19 +244,17 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                 let count = self.predictedCardInfo[.issueDate(issueDate), default: 0]
                 self.predictedCardInfo[.issueDate(issueDate)] = count + 1
                 
-                if count > 3 {
+                if count > 5 {
                     self.selectedCard.issueDate = issueDate
-                    print(self.selectedCard)
                 }
             }
             
             if let expireDate = creditCard.expireDate {
                 let count = self.predictedCardInfo[.expireDate(expireDate), default: 0]
                 self.predictedCardInfo[.expireDate(expireDate)] = count + 1
-
-                if count > 3 {
+                
+                if count > 5 {
                     self.selectedCard.expireDate = expireDate
-                    //print(self.selectedCard)
                 }
             }
             
@@ -291,10 +262,12 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                 let count = self.predictedCardInfo[.name(name), default: 0]
                 self.predictedCardInfo[.name(name)] = count + 1
                 
-                if count > 3 {
+                if count > 5 {
                     self.selectedCard.holderName = name
-                    //print(self.selectedCard)
                 }
+            }
+            if self.selectedCard.cardNumber != nil && self.selectedCard.holderName != nil {
+                self.captureSession.stopRunning()
             }
         }
         
