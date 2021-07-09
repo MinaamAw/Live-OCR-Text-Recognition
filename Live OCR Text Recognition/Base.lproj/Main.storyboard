@@ -105,7 +105,7 @@
         <scene sceneID="rxc-st-ogv">
             <objects>
                 <viewController id="2nm-6U-VZ2" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="vqE-JF-4Dk">
+                    <view key="view" contentMode="scaleToFill" id="vqE-JF-4Dk" customClass="Camera">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="cy5-L8-806"/>

@@ -190,7 +190,7 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                     .replacingOccurrences(of: "-", with: " ") {
                     creditCard.cardNumber = cardNumber
                     
-                    print(cardNumber)
+                    //print(cardNumber)
                     
                 } else if let month = month.captures(in: string).last.flatMap(Int.init),
                           let year = year.captures(in: string).last.flatMap({ Int("20" + $0) }) {
@@ -200,21 +200,21 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                         creditCard.issueDate = DateComponents(year: year, month: month)
                         self.dateCount = self.dateCount + 1
                         self.intYear = year
-                        print("Date Count Year \(self.intYear)")
+                        //print("Date Count Year \(self.intYear)")
                     }
                     else {
                         if self.intYear == year {
                             if self.intExpYear == 0 {
                                 creditCard.expireDate = DateComponents(year: year, month: month)
-                                print("Expire Date: \(year)")
+                                //print("Expire Date: \(year)")
                             } else {
                                 creditCard.issueDate = DateComponents(year: year, month: month)
-                                print("Issue Date: \(year)")
+                                //print("Issue Date: \(year)")
                             }
                         } else {
                             self.intExpYear = self.intExpYear + 1
                             creditCard.expireDate = DateComponents(year: year, month: month)
-                            print("Expire Date: \(year)")
+                            //print("Expire Date: \(year)")
                         }
                     }
                 } else if let name = name.firstMatch(in: string) {
@@ -222,8 +222,7 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                     if containsInvalidName { continue }
                     creditCard.holderName = name
                     
-                    print(name)
-                    
+                    //print(name)
                 } else {
                     continue
                 }
@@ -235,7 +234,7 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                 let count = self.predictedCardInfo[.number(number), default: 0]
                 self.predictedCardInfo[.number(number)] = count + 1
                 
-                if count > 5 {
+                if count > 1 {
                     self.selectedCard.cardNumber = number
                 }
             }
@@ -244,7 +243,7 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                 let count = self.predictedCardInfo[.issueDate(issueDate), default: 0]
                 self.predictedCardInfo[.issueDate(issueDate)] = count + 1
                 
-                if count > 5 {
+                if count > 1 {
                     self.selectedCard.issueDate = issueDate
                 }
             }
@@ -253,7 +252,7 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                 let count = self.predictedCardInfo[.expireDate(expireDate), default: 0]
                 self.predictedCardInfo[.expireDate(expireDate)] = count + 1
                 
-                if count > 5 {
+                if count > 1 {
                     self.selectedCard.expireDate = expireDate
                 }
             }
@@ -267,7 +266,9 @@ class SecondViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                 }
             }
             if self.selectedCard.cardNumber != nil && self.selectedCard.holderName != nil {
+                print(self.selectedCard)
                 self.captureSession.stopRunning()
+                return
             }
         }
         
