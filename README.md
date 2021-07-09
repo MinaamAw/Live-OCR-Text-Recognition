@@ -8,8 +8,7 @@ The Mobile Application detects Credit Cards & National Identity Cards (NICs) thr
 
 
 # 👨🏻‍💻 Screenshot (Progress)
-![](https://user-images.githubusercontent.com/77392440/124214073-1649f180-db0b-11eb-8d47-0ff71d12a8ee.gif)
-
+https://user-images.githubusercontent.com/77392440/125057015-3ad13b00-e0c2-11eb-84a7-25abc58c447a.mov
 
 
 # References
